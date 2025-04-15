@@ -1,0 +1,173 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Premium - Welcome</title>
+  <style>
+    /* CSS Reset - KEEP ALL INLINE CSS EXACTLY AS PROVIDED */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      /* Use a common font stack if 'Circular Spotify' isn't available */
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Styles */
+    header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #282828;
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 20px;
+    }
+
+    /* Main Content Styles */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .welcome-text {
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    .welcome-text h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #1DB954;
+    }
+
+    .welcome-text p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    /* Auth Options */
+    .auth-options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .auth-btn {
+      padding: 15px;
+      border-radius: 500px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: #1DB954;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #1ed760;
+      transform: scale(1.05);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: white;
+      border: 1px solid #535353;
+    }
+
+    .btn-secondary:hover {
+      border-color: #b3b3b3;
+      transform: scale(1.05);
+    }
+
+    /* Footer Styles */
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid #282828;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      color: #b3b3b3;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+    .footer-links a:hover {
+      color: #1DB954;
+      text-decoration: underline;
+    }
+
+    .copyright {
+      color: #535353;
+      font-size: 0.7rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    {# Use the static tag to load the logo image from the player app's static dir #}
+    <img src="{% static 'player/images/logo1.png' %}" alt="Spotify Logo" class="logo">
+  </header>
+
+  <main>
+    <div class="welcome-text">
+      <h1>Welcome to Spotify Premium</h1>
+      <p>Listen to millions of songs, podcasts, and audiobooks with exceptional audio quality. No interruptions. No limits.</p>
+    </div>
+
+    <div class="auth-options">
+      {# Link to the main player page (assuming its view name is 'index' in player.urls) #}
+      <a href="{% url 'main' %}" class="auth-btn btn-primary">Continue as Guest</a>
+
+      {# Links to placeholder views within the player app #}
+      <a href="{% url 'login' %}" class="auth-btn btn-secondary">Log In</a>
+      <a href="{% url 'signup' %}" class="auth-btn btn-secondary">Register</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      {# Links to placeholder views within the player app #}
+      <a href="{% url 'privacy' %}">Privacy Policy</a>
+      <a href="{% url 'terms' %}">Terms and Conditions</a>
+      <a href="{% url 'cookies' %}">Cookies</a>
+    </div>
+    <p class="copyright">© {% now "Y" %} Spotify AB</p> {# Use Django tag for dynamic year #}
+  </footer>
+
+</body>
+</html>

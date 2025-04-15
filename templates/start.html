@@ -1,0 +1,395 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spotify Premium</title>
+
+  <!-- React and Babel CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Pass static image paths into window -->
+  <script>
+    window.staticLogo1 = "{% static 'player/images/logo1.png' %}";
+    window.staticLogoCenter = "{% static 'player/images/logo.png' %}";
+  </script>
+
+  <style>
+    /* CSS Reset and Animations */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @keyframes soundWave {
+      0%, 100% { height: 10px; }
+      25% { height: 40px; }
+      50% { height: 20px; }
+      75% { height: 30px; }
+    }
+
+    @keyframes flipIn {
+      0% { transform: rotateX(90deg) scale(0.5); opacity: 0; }
+      100% { transform: rotateX(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 5px #1DB954); }
+      50% { filter: drop-shadow(0 0 20px #1DB954); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    body {
+      font-family: 'Circular Spotify', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    #root {
+      height: 100%;
+    }
+
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #191414 0%, #0f0f0f 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .corner-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 150px;
+      height: 80px;
+      animation: pulse 2s infinite, glow 4s infinite alternate;
+    }
+
+    .logo-container {
+      display: flex;
+      margin-bottom: 40px;
+      perspective: 1000px;
+      align-items: center;
+    }
+
+    .logo-letter {
+      font-size: 5rem;
+      font-weight: 900;
+      color: white;
+      opacity: 0;
+      transform: translateY(20px);
+      margin: 0 3px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      animation: flipIn 0.8s forwards, glow 4s infinite alternate;
+    }
+
+    .logo-image {
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: flipIn 0.8s forwards, bounce 2s infinite, glow 4s infinite alternate;
+      margin: 0 3px;
+    }
+
+    .sound-wave {
+      display: flex;
+      height: 50px;
+      align-items: flex-end;
+      gap: 5px;
+      margin-bottom: 30px;
+    }
+
+    .wave-bar {
+      width: 6px;
+      background: white;
+      border-radius: 3px;
+      animation: soundWave 1.5s infinite ease-in-out;
+    }
+
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .progress-container {
+      width: 300px;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: white;
+      transition: width 0.1s linear;
+    }
+
+    .status-text {
+      color: white;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .main-app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .vinyl-container {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: 100px;
+      animation: spin 5s linear infinite;
+    }
+
+    .vinyl {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #333 30%, #000 70%);
+      border: 2px solid #444;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .vinyl-inner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #1DB954;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid white;
+    }
+
+    .vinyl-lines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      top: 0;
+      left: 0;
+    }
+
+    .vinyl-line {
+      position: absolute;
+      width: 2px;
+      height: 20px;
+      background: white;
+      top: 50%;
+      left: 50%;
+      transform-origin: top center;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [loadingComplete, setLoadingComplete] = useState(false);
+      const [progress, setProgress] = useState(0);
+      const [status, setStatus] = useState("Initializing...");
+
+      const createParticles = () => {
+        const particles = [];
+        for (let i = 0; i < 30; i++) {
+          particles.push({
+            id: i,
+            left: Math.random() * 100,
+            delay: Math.random() * 2,
+            duration: 2 + Math.random() * 3
+          });
+        }
+        return particles;
+      };
+
+      const particles = createParticles();
+
+      const createVinylLines = () => {
+        const lines = [];
+        for (let i = 0; i < 36; i++) {
+          lines.push({ id: i, rotation: i * 10 });
+        }
+        return lines;
+      };
+
+      const vinylLines = createVinylLines();
+
+      useEffect(() => {
+        const statusMessages = [
+          "Loading libraries...",
+          "Connecting to Spotify...",
+          "Almost there...",
+          "Ready to play!"
+        ];
+
+        const progressInterval = setInterval(() => {
+          setProgress(prev => {
+            const newProgress = prev + (0.5 + Math.random() * 1.5);
+            if (newProgress >= 100) {
+              clearInterval(progressInterval);
+              setTimeout(() => {
+                setLoadingComplete(true);
+                setTimeout(() => {
+                  window.location.href = "home.html";
+                }, 1000);
+              }, 500);
+              return 100;
+            }
+
+            if (newProgress < 30) setStatus(statusMessages[0]);
+            else if (newProgress < 60) setStatus(statusMessages[1]);
+            else if (newProgress < 90) setStatus(statusMessages[2]);
+            else setStatus(statusMessages[3]);
+
+            return newProgress;
+          });
+        }, 100);
+
+        return () => clearInterval(progressInterval);
+      }, []);
+
+      if (loadingComplete) {
+        return (
+          <div className="main-app">
+            <h1>Spotify</h1>
+            <p>Your music is ready</p>
+            <p>Redirecting to home page...</p>
+          </div>
+        );
+      }
+
+      return (
+        <div className="splash-screen">
+          <img src={window.staticLogo1} className="corner-logo" alt="Spotify" />
+
+          <div className="logo-container">
+            <div className="logo-letter" style={{ animationDelay: `0.1s`, color: '#fff' }}>S</div>
+            <div className="logo-letter" style={{ animationDelay: `0.2s`, color: '#1DB954' }}>P</div>
+            <img src={window.staticLogoCenter} className="logo-image" alt="Spotify O" style={{ animationDelay: `0.3s` }} />
+            <div className="logo-letter" style={{ animationDelay: `0.4s`, color: '#fff' }}>T</div>
+            <div className="logo-letter" style={{ animationDelay: `0.5s`, color: '#1DB954' }}>I</div>
+            <div className="logo-letter" style={{ animationDelay: `0.6s`, color: '#fff' }}>F</div>
+            <div className="logo-letter" style={{ animationDelay: `0.7s`, color: '#1DB954' }}>Y</div>
+          </div>
+
+          <div className="sound-wave">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="wave-bar"
+                style={{
+                  height: `${10 + Math.random() * 30}px`,
+                  animationDelay: `${i * 0.1}s`
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="progress-container">
+            <div className="progress-bar" style={{ width: `${progress}%` }} />
+          </div>
+
+          <div className="status-text">{status}</div>
+
+          <div className="particles">
+            {particles.map(p => (
+              <div
+                key={p.id}
+                className="particle"
+                style={{
+                  left: `${p.left}%`,
+                  top: '100%',
+                  animation: `float ${p.duration}s linear ${p.delay}s infinite`,
+                  opacity: 0.7
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="vinyl-container">
+            <div className="vinyl">
+              <div className="vinyl-lines">
+                {vinylLines.map(line => (
+                  <div
+                    key={line.id}
+                    className="vinyl-line"
+                    style={{
+                      transform: `rotate(${line.rotation}deg) translateY(-40px)`
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="vinyl-inner"></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

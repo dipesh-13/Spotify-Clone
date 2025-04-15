@@ -1,0 +1,163 @@
+{% load static %} {# Load static tag functionality #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify - Terms and Conditions</title>
+  <style>
+    /* KEEP ALL INLINE CSS EXACTLY AS PROVIDED */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      /* Use a common font stack if 'Circular Spotify' isn't available */
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: #121212;
+      color: #fff;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #333;
+    }
+    .logo {
+      width: 120px; /* Ensure width is set if needed, height might be better */
+      height: 40px; /* Match landing page logo height */
+      object-fit: contain; /* Prevent distortion */
+    }
+    .home-btn {
+      background: #1DB954;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px; /* Match other buttons */
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none; /* In case it renders as a link */
+      font-size: 0.9rem; /* Adjust size as needed */
+      line-height: 1; /* Align text better */
+    }
+    .home-btn:hover {
+      background: #1ed760;
+      transform: scale(1.05);
+    }
+    h1 {
+      color: #1DB954;
+      margin: 20px 0;
+      font-size: 2rem;
+    }
+    h2 {
+      margin: 15px 0;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+    p, li {
+      margin-bottom: 15px;
+      color: #b3b3b3;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .nav-links a {
+      color: #1DB954;
+      text-decoration: none;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      {# Use static tag for the logo #}
+      <img src="{% static 'player/images/logo1.png' %}" alt="Spotify Logo" class="logo">
+      {# Update onclick to use Django URL #}
+      
+    </header>
+
+    <h1>Spotify Terms and Conditions of Use</h1>
+    <p>Last Updated: January 1, 2023</p> {# Keep static or replace with dynamic date if needed #}
+
+    <section>
+      <h2>1. Introduction</h2>
+      <p>Welcome to Spotify. By accessing or using our service, you agree to be bound by these Terms and Conditions.</p>
+    </section>
+
+    <section>
+      <h2>2. The Spotify Service</h2>
+      <p>The Spotify service allows you to play music and other content on demand, create playlists, and access other features we may provide.</p>
+    </section>
+
+    <section>
+      <h2>3. Your Use of the Service</h2>
+      <p>You agree to use the Service only for lawful purposes and in accordance with these Terms. You agree not to:</p>
+      <ul>
+        <li>Use the Service in any way that violates any applicable law</li>
+        <li>Attempt to gain unauthorized access to the Service</li>
+        <li>Reverse engineer, decompile or disassemble the Service</li>
+        <li>Use the Service to distribute malicious software</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Subscription Terms</h2>
+      <p>Some features of the Service require payment. By signing up for a subscription, you agree to pay the applicable fees.</p>
+    </section>
+
+    <section>
+      <h2>5. Intellectual Property</h2>
+      <p>All content included in the Service is the property of Spotify or its licensors and is protected by copyright laws.</p>
+    </section>
+
+    <section>
+      <h2>6. Termination</h2>
+      <p>We may terminate or suspend your account immediately if you violate these Terms.</p>
+    </section>
+
+    <section>
+      <h2>7. Changes to Terms</h2>
+      <p>We may modify these Terms at any time. Your continued use of the Service constitutes acceptance of the modified Terms.</p>
+    </section>
+
+    <div class="nav-links">
+      {# These should already be correct from previous steps #}
+      <a href="{% url 'cookies' %}">Cookies Policy</a>
+      <a href="{% url 'privacy' %}">Privacy Policy</a>
+    </div>
+
+    <footer>
+      {# Use dynamic year tag #}
+      <p>© {% now "Y" %} Spotify AB. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>

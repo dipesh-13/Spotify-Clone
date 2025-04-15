@@ -1,0 +1,56 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify - Cookies Policy</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Circular Spotify', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #1DB954;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #b3b3b3;
+      margin-bottom: 20px;
+    }
+    a {
+      color: #1DB954;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cookies Policy</h1>
+    <p>We use cookies to enhance your experience on Spotify. Cookies help us personalize content, provide social media features, and analyze our traffic.</p>
+    <p>By using our website, you consent to the use of cookies in accordance with this policy. You can change your cookie settings at any time in your browser.</p>
+    <p>Some cookies are essential for the website to function properly. Others help us understand how you use our service so we can improve it.</p>
+    <a href="{% url 'home' %}">← Back to Home</a>
+
+    <footer>
+      <p>&copy; 2023 Spotify AB. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
