@@ -1,0 +1,1144 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Premium Clone</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    
+
+    <style>
+        /* ===== PASTE ALL CSS RULES FROM style.css HERE ===== */
+
+        /* ===== Global Styles ===== */
+        :root {
+            --primary: #1DB954;
+            --primary-hover: #1ed760;
+            --dark: #121212;
+            --dark-secondary: #181818;
+            --dark-tertiary: #282828;
+            --light-gray: #b3b3b3;
+            --text-primary: #ffffff;
+            --nav-height: 60px;
+            --player-height: 90px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: calc(var(--player-height) + 20px); /* Added space */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* ===== Top Navigation ===== */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            background-color: var(--dark-secondary);
+            height: var(--nav-height);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 24px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        /* --- Search Bar --- */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--dark-tertiary);
+            border-radius: 20px;
+            padding: 5px 15px;
+            flex-grow: 0.5; /* Allow some growth */
+            max-width: 400px;
+            margin: 0 15px; /* Add spacing */
+        }
+
+        .search-input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            flex-grow: 1; /* Take remaining space */
+            margin-left: 10px;
+            min-width: 50px; /* Ensure it doesn't collapse */
+        }
+
+        .search-container i {
+           color: var(--light-gray);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .nav-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.2s;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        /* --- Profile Dropdown --- */
+        .profile-dropdown {
+            position: relative;
+            margin-left: 15px; /* Space from nav links */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .profile-btn {
+            background-color: var(--dark-tertiary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex; /* Center content */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            right: 0;
+            top: 100%; /* Position below button */
+            margin-top: 8px; /* Space from button */
+            background-color: var(--dark-tertiary);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden; /* Clip corners */
+            z-index: 101; /* Above player */
+        }
+
+        .dropdown-content a {
+            color: var(--text-primary);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block; /* Full width link */
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--dark-secondary); /* Highlight on hover */
+        }
+
+        .dropdown-content a i {
+            margin-right: 10px;
+            width: 20px; /* Align icons */
+            text-align: center;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+        }
+
+        /* Show dropdown on hover/focus */
+        .profile-dropdown:hover .dropdown-content,
+        .profile-btn:focus + .dropdown-content,
+        .profile-dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+
+
+        /* ===== Main Content ===== */
+        .main-container {
+            padding: 30px;
+        }
+
+        #content-area {
+            /* Container for dynamic content switching if needed */
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1DB954 0%, #1e3c1a 100%);
+            padding: 60px 40px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: var(--text-primary);
+            color: var(--dark);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none; /* For link buttons */
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9; /* Slight fade */
+        }
+        .btn-primary:hover {
+             background-color: var(--primary-hover);
+             opacity: 1; /* Keep primary fully visible */
+        }
+
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 10px; /* Space between items if they wrap */
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .see-all {
+            color: var(--light-gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-weight: 600;
+            text-decoration: none; /* Remove underline */
+        }
+
+        .see-all:hover {
+            color: var(--primary);
+        }
+
+        .music-grid {
+            display: grid;
+            /* Responsive columns */
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        #music-grid-container {
+            /* Parent for observing changes if needed */
+        }
+
+        .music-card {
+            background: var(--dark-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative; /* For positioning play button */
+            overflow: hidden; /* Clip play button initially */
+        }
+
+        .music-card:hover {
+            background: var(--dark-tertiary); /* Darken on hover */
+        }
+
+        .music-cover {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Maintain square shape */
+            border-radius: 4px;
+            object-fit: cover; /* Scale image nicely */
+            margin-bottom: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            display: block; /* Remove extra space below image */
+            background-color: var(--dark-tertiary); /* Placeholder color */
+        }
+
+        .music-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add '...' for overflow */
+            font-size: 16px;
+            line-height: 1.3; /* Adjust spacing */
+        }
+
+        .music-artist {
+            color: var(--light-gray);
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .play-button {
+            position: absolute;
+            bottom: 20px; /* Position from bottom */
+            right: 20px;  /* Position from right */
+            background-color: var(--primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%; /* Make it circular */
+            display: flex; /* Center icon */
+            align-items: center;
+            justify-content: center;
+            opacity: 0; /* Hidden by default */
+            /* Smooth pop-in animation */
+            transform: translateY(10px) scale(0.9);
+            transition: all 0.3s cubic-bezier(0.3, 0, 0, 1.3); /* Ease-out-back style */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: none;
+            color: white; /* Icon color */
+            cursor: pointer;
+            z-index: 2; /* Above other card content */
+        }
+
+        .play-button i {
+           font-size: 18px;
+           transition: transform 0.2s ease; /* Smooth icon change/scale */
+        }
+
+        /* Show play button on card hover or when playing */
+        .music-card:hover .play-button,
+        .music-card.playing .play-button {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Pause icon state */
+        .play-button.playing i::before {
+            content: "\f04c"; /* Font Awesome pause icon unicode */
+        }
+
+        .play-button:hover {
+            transform: scale(1.1); /* Scale up button on hover */
+        }
+
+        /* Style for disabled play button */
+        .play-button:disabled {
+            background-color: var(--light-gray) !important;
+            opacity: 0.3 !important; /* Very faded */
+            cursor: not-allowed !important;
+            transform: translateY(0) scale(1) !important; /* Keep it visible but disabled */
+        }
+        .play-button:disabled:hover {
+            transform: scale(1) !important; /* No hover effect when disabled */
+        }
+
+
+        /* ===== Now Playing Bar ===== */
+        .now-playing-bar {
+            position: fixed; /* Stick to bottom */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--player-height);
+            background-color: var(--dark-tertiary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100; /* Above main content, below dropdown */
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+            gap: 15px; /* Space between main sections */
+        }
+
+        /* --- Song Info (Left Side) --- */
+        .song-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-basis: 30%; /* Initial width */
+            min-width: 180px; /* Minimum space */
+            flex-shrink: 1; /* Allow shrinking */
+            overflow: hidden; /* Hide overflow */
+        }
+
+        .song-info img {
+            width: 56px;
+            height: 56px;
+            border-radius: 4px;
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent image shrinking */
+            background-color: var(--dark-secondary); /* Placeholder bg */
+        }
+
+        .song-text {
+            overflow: hidden; /* Hide text overflow */
+            flex-grow: 1; /* Take available space */
+        }
+
+        .song-text .title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        .song-text .artist {
+            color: var(--light-gray);
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .heart-icon {
+            color: var(--light-gray);
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            margin-left: 10px; /* Space from text */
+            font-size: 16px;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .heart-icon:hover {
+            color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .heart-icon.liked {
+            color: var(--primary); /* Green when liked */
+        }
+
+        /* --- Player Controls (Center) --- */
+        .player-controls {
+            display: flex;
+            flex-direction: column; /* Stack buttons and progress */
+            align-items: center;
+            flex-basis: 40%; /* Initial width */
+            flex-grow: 1; /* Allow growth */
+            min-width: 250px; /* Minimum space */
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 8px;
+        }
+
+        .control-buttons button {
+            background: none;
+            border: none;
+            color: var(--light-gray);
+            font-size: 18px; /* Standard icon size */
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            padding: 5px; /* Increase clickable area */
+            line-height: 1; /* Prevent extra spacing */
+        }
+
+        .control-buttons button:hover {
+            color: var(--text-primary);
+        }
+
+        .control-buttons button:active {
+            transform: scale(0.9); /* Click feedback */
+        }
+
+        /* Main Play/Pause Button */
+        .control-buttons .play-pause {
+            background-color: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark); /* Icon color */
+            font-size: 16px; /* Slightly smaller icon */
+            transition: transform 0.2s ease;
+        }
+
+        .control-buttons .play-pause:hover {
+            transform: scale(1.05);
+        }
+        .control-buttons .play-pause:active {
+            transform: scale(1); /* Reset scale on click */
+        }
+
+        /* Progress Bar Area */
+        .progress-container {
+            width: 100%;
+            max-width: 500px; /* Limit width on large screens */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-time {
+            color: var(--light-gray);
+            font-size: 12px;
+            min-width: 40px; /* Prevent time jumping */
+            text-align: center;
+            user-select: none; /* Prevent text selection */
+        }
+
+        /* Common slider styles */
+        .slider-bar {
+            flex-grow: 1;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative; /* For progress element */
+        }
+        .slider-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: var(--light-gray); /* Default progress color */
+            border-radius: 2px;
+            transition: width 0.1s linear, background-color 0.2s ease; /* Smooth transitions */
+            pointer-events: none; /* Don't block clicks on bar */
+        }
+        /* Progress thumb (circle) */
+        .slider-progress::after {
+            content: '';
+            position: absolute;
+            right: -6px; /* Center thumb over the end */
+            top: 50%;
+            transform: translateY(-50%) scale(0); /* Hidden by default */
+            width: 12px;
+            height: 12px;
+            background-color: var(--text-primary);
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            pointer-events: auto; /* Allow interaction if needed (though usually not) */
+        }
+        /* Enhance progress bar on hover */
+        .slider-bar:hover .slider-progress {
+            background-color: var(--primary); /* Green progress on hover */
+        }
+        .slider-bar:hover .slider-progress::after {
+            transform: translateY(-50%) scale(1); /* Show thumb on hover */
+        }
+
+
+        /* Specific Slider Instances */
+        .progress-bar { /* This is the specific progress slider bar */
+            width: 100%; /* Takes available space in container */
+        }
+        .progress { /* This is the specific progress slider progress fill */
+            width: 0%; /* Default progress */
+        }
+
+        .volume-bar { /* This is the specific volume slider bar */
+            width: 100px; /* Fixed width for volume */
+            flex-grow: 0; /* Don't grow */
+        }
+        .volume-progress { /* This is the specific volume slider progress fill */
+           width: 70%; /* Default volume */
+        }
+
+
+        /* --- Volume Controls (Right Side) --- */
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-basis: 30%; /* Initial width */
+            min-width: 130px; /* Minimum space */
+            justify-content: flex-end; /* Align to the right */
+            flex-shrink: 1; /* Allow shrinking */
+        }
+
+        .volume-icon {
+            color: var(--light-gray);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+        .volume-icon:hover {
+            color: var(--text-primary);
+        }
+
+        /* Message inside grid (e.g., 'No results') */
+        .grid-message {
+            color: var(--light-gray);
+            grid-column: 1 / -1; /* Span all columns */
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 1200px) {
+            .search-container { max-width: 300px; }
+            .music-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+            /* Adjust flex basis for player sections */
+            .song-info, .volume-controls { flex-basis: 25%; }
+            .player-controls { flex-basis: 50%; }
+        }
+
+        @media (max-width: 992px) {
+            .search-container { display: none; } /* Hide search bar */
+            .hero-title { font-size: 36px; }
+            .hero-subtitle { font-size: 18px; }
+            .section-title { font-size: 24px; }
+            .music-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+            .now-playing-bar { padding: 0 15px; }
+            .song-text .title { font-size: 13px;}
+            .song-text .artist { font-size: 11px;}
+            .volume-controls { display: none; } /* Hide volume control */
+            /* Adjust flex basis when volume is hidden */
+            .song-info { flex-basis: 40%; min-width: 150px; }
+            .player-controls { flex-basis: 60%; min-width: 200px; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding-bottom: calc(var(--player-height) + 40px); } /* More padding for thicker bar */
+            .top-nav { padding: 0 15px; }
+            .nav-links { display: none; } /* Hide top nav links */
+            .profile-dropdown { margin-left: auto; } /* Push profile to right */
+            .main-container { padding: 15px; }
+            .hero { padding: 30px 15px; }
+            .hero-title { font-size: 32px; }
+            .music-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+            .music-title { font-size: 14px; }
+            .music-artist { font-size: 12px; }
+            .play-button { width: 40px; height: 40px; bottom: 15px; right: 15px; }
+            .play-button i { font-size: 16px; }
+            /* Player bar stacking */
+            .now-playing-bar {
+                flex-wrap: wrap; /* Allow items to wrap */
+                height: auto; /* Adjust height automatically */
+                padding: 10px 15px;
+                /* Adjust player height variable's effect on body padding if needed */
+            }
+            .song-info {
+                flex-basis: 100%; /* Full width */
+                order: 1; /* Show first */
+                margin-bottom: 10px;
+                justify-content: flex-start; /* Align left */
+                gap: 10px;
+                min-width: 0; /* Remove min-width */
+            }
+            .song-info img { width: 48px; height: 48px;}
+            .heart-icon { margin-left: auto; } /* Push heart to right */
+            .player-controls {
+                flex-basis: 100%; /* Full width */
+                order: 2; /* Show second */
+                min-width: 0; /* Remove min-width */
+            }
+            .progress-container { max-width: none; } /* Allow progress full width */
+            .control-buttons { gap: 15px; }
+            .volume-controls { display: none; } /* Ensure volume is hidden */
+        }
+
+        @media (max-width: 576px) {
+            /* Adjust body padding for stacked player bar - may need tweaking */
+            body { padding-bottom: 140px; } /* Approx height of stacked player */
+            .logo span { display: none; } /* Hide "Spotify" text */
+            .hero-title { font-size: 28px; }
+            .hero-subtitle { font-size: 16px; }
+            .btn { padding: 10px 20px; font-size: 14px; }
+            .section-title { font-size: 20px; }
+            .music-grid { grid-template-columns: repeat(2, 1fr); } /* Fixed 2 columns */
+            .now-playing-bar { padding: 10px; }
+            .song-info { gap: 10px; margin-bottom: 10px;}
+            .song-text .title { font-size: 14px; }
+            .song-text .artist { font-size: 12px; }
+            .player-controls { margin-top: 5px; }
+            .control-buttons { gap: 12px; }
+            .control-buttons button { font-size: 16px; } /* Smaller icons */
+            .control-buttons .play-pause { width: 32px; height: 32px; font-size: 14px;}
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chatbot-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-button i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 180px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: var(--dark-secondary);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .chatbot-header {
+            background-color: var(--primary);
+            padding: 15px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-messages {
+            height: calc(100% - 130px);
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            margin-left: auto;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px 15px 0 15px;
+        }
+
+        .bot-message {
+            background-color: var(--dark-tertiary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px 15px 15px 0;
+        }
+
+        .chatbot-input {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--dark-tertiary);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--dark);
+            color: white;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background-color: var(--primary);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chatbot-input button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .close-chatbot {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* ===== End of Pasted CSS ===== */
+    </style>
+
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="logo">
+            <i class="fab fa-spotify"></i>
+            <span>Spotify</span>
+        </div>
+
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for artists or songs">
+        </div>
+
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#">Your Library</a>
+        </div>
+
+        <div class="profile-dropdown">
+            <button class="profile-btn">JD</button>
+            <div class="dropdown-content">
+                <a href="#"><i class="far fa-user"></i> Profile</a>
+                <a href="#"><i class="far fa-clock"></i> Recently Played</a>
+                <a href="#"><i class="far fa-heart"></i> Liked Songs</a>
+                <div class="dropdown-divider"></div>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container" id="content-area">
+        <section class="hero" id="hero-section">
+            <h1 class="hero-title">Welcome Back</h1>
+            <p class="hero-subtitle">Millions of songs and podcasts. Find your favorites.</p>
+        </section>
+
+        <div class="section-header" id="search-results-header" style="display: none;">
+            <h2 class="section-title">Search Results</h2>
+            <span class="see-all" style="cursor: default;"></span>
+        </div>
+
+        <div id="music-grid-container">
+            <div class="music-grid" id="search-results-grid" style="display: none;">
+                <!-- Search results injected here -->
+                 <p class="grid-message">Enter a search query above.</p>
+            </div>
+
+            <div id="recently-played-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recently played</h2>
+                    <a href="#" class="see-all">See all</a>
+                </div>
+                <div class="music-grid" id="recently-played-grid">
+                    <!-- Static Cards with Valid Preview URLs -->
+                    <div class="music-card" data-preview-url="{% static '1.mp3' %}" data-track-data='{"id":"static-Blinding-Lights","title_short":"Blinding Lights","artist":{"name":"The Weeknd"},"album":{"cover_medium":"https://a10.gaanacdn.com/gn_img/albums/9MAWe97WyJ/MAWeG6wRKy/size_m.jpg"},"preview":"{% static "1.mp3" %}" }'>
+                        <img src="https://a10.gaanacdn.com/gn_img/albums/9MAWe97WyJ/MAWeG6wRKy/size_m.jpg" alt="Blinding Lights Cover" class="music-cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">Blinding Lights</h3>
+                        <p class="music-artist">The Weeknd</p>
+                        <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                     <div class="music-card" data-preview-url="{% static '2.mp3' %}" data-track-data='{"id":"static-As-It-Was","title_short":"As It Was","artist":{"name":"Harry Styles"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/f802e378981883a6cfc5f31c566941ba/264x264-000000-80-0-0.jpg"},"preview":"{% static "2.mp3" %}"}'>
+                        <img src="https://www.billboard.com/wp-content/uploads/2022/04/Harry-Styles-As-It-Was-screenshot-billboard-1548.jpg" alt="As It Was Cover" class="music-cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">As It Was</h3>
+                        <p class="music-artist">Harry Styles</p>
+                        <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="music-card" data-preview-url="{% static '3.mp3' %}" data-track-data='{"id":"static-STAY","title_short":"STAY","artist":{"name":"The Kid LAROI, Justin Bieber"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/64f231c39260690926481c5773710b5f/264x264-000000-80-0-0.jpg"},"preview":"{% static "3.mp3" %}"}'>
+                        <img src="https://i.scdn.co/image/ab67616d0000b27341e31d6ea1d493dd77933ee5" alt="STAY Cover" class="music-cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">STAY</h3>
+                        <p class="music-artist">The Kid LAROI, Justin Bieber</p>
+                        <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="music-card" data-preview-url="{% static '4.mp3' %}" data-track-data='{"id":"static-Levitating","title_short":"Levitating","artist":{"name":"Dua Lipa"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/d40552f34289d32f0c5dfae0b0789891/264x264-000000-80-0-0.jpg"},"preview":"{% static "4.mp3" %}"}'>
+                        <img src="https://c.saavncdn.com/665/Future-Nostalgia-English-2020-20231110075246-500x500.jpg" alt="Levitating Cover" class="music-cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">Levitating</h3>
+                        <p class="music-artist">Dua Lipa</p>
+                        <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="made-for-you-section">
+                <div class="section-header">
+                    <h2 class="section-title">Made for You</h2>
+                    <a href="#" class="see-all">See all</a>
+                </div>
+                <div class="music-grid" id="made-for-you-grid">
+                    <div class="music-card" data-preview-url="C:\Users\Ranbir\Desktop\c++ file\spotify_clone\spotify_clone\static\1.mp3" data-track-data='{"id":"static-good-4-u","title_short":"good 4 u","artist":{"name":"Olivia Rodrigo"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/c6e6b0a2496f1ead08c7a5b2f1e41587/264x264-000000-80-0-0.jpg"},"preview":"{% static "5.mp3" %}"}'>
+                        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/e678bd119570653.60a090a514e50.jpg" class="music-cover" alt="good 4 u Cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        
+                        <h3 class="music-title">good 4 u</h3>
+                        <p class="music-artist">Olivia Rodrigo</p>
+                        <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        
+                    </div>
+                     <div class="music-card" data-preview-url="{% static '6.mp3' %}" data-track-data='{"id":"static-Peaches","title_short":"Peaches (feat. Daniel Caesar & Giveon)","artist":{"name":"Justin Bieber"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/c301536a737408061d5e05692380046e/264x264-000000-80-0-0.jpg"},"preview":"{% static "6.mp3" %}"}'>
+                        <img src="https://i1.sndcdn.com/artworks-boUvTeTEft8V0b2G-8spb0A-t500x500.jpg" class="music-cover" alt="Peaches Cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">Peaches (feat. Daniel Caesar & Giveon)</h3>
+                        <p class="music-artist">Justin Bieber</p>
+                         <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="music-card" data-preview-url="{% static '7.mp3' %}" data-track-data='{"id":"static-Shivers","title_short":"Shivers","artist":{"name":"Ed Sheeran"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/d5a96f2b009576ccf5f7d34a99f8a8a3/264x264-000000-80-0-0.jpg"},"preview":"{% static "7.mp3" %}"}'>
+                        <img src="https://c.saavncdn.com/940/Shivers-English-2021-20211022044815-500x500.jpg" class="music-cover" alt="Shivers Cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">Shivers</h3>
+                        <p class="music-artist">Ed Sheeran</p>
+                         <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="music-card" data-preview-url="{% static '2.mp3' %}" data-track-data='{"id":"static-MONTERO","title_short":"MONTERO (Call Me By Your Name)","artist":{"name":"Lil Nas X"},"album":{"cover_medium":"https://e-cdns-images.dzcdn.net/images/cover/1e436a60b67e7a875e1b9b571fb3ff43/264x264-000000-80-0-0.jpg"},"preview":"{% static "2.mp3" %}"}'>
+                        <img src="https://upload.wikimedia.org/wikipedia/en/e/e6/Montero_%28Call_Me_by_Your_Name%29.png" class="music-cover" alt="MONTERO Cover" loading="lazy" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                        <h3 class="music-title">MONTERO (Call Me By Your Name)</h3>
+                        <p class="music-artist">Lil Nas X</p>
+                        <button class="play-button" title="Play Preview">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" style="display: none;" preload="metadata"></audio>
+
+    <!-- Now Playing Bar -->
+    <footer class="now-playing-bar">
+        <div class="song-info">
+            <img id="player-cover" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Album cover">
+            <div class="song-text">
+                <p class="title" id="player-title">No song selected</p>
+                <p class="artist" id="player-artist">...</p>
+            </div>
+            <i class="far fa-heart heart-icon" title="Save to Your Library"></i>
+        </div>
+
+        <div class="player-controls">
+            <div class="control-buttons">
+                <button title="Shuffle" id="shuffle-btn"><i class="fas fa-random"></i></button>
+                <button title="Previous" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                <button class="play-pause" title="Play" id="main-play-pause-btn"><i class="fas fa-play"></i></button>
+                <button title="Next" id="next-btn"><i class="fas fa-step-forward"></i></button>
+                <button title="Repeat" id="repeat-btn"><i class="fas fa-redo"></i></button>
+            </div>
+
+            <div class="progress-container">
+                <span class="progress-time" id="current-time">0:00</span>
+                <div class="progress-bar slider-bar" id="progress-bar">
+                    <div class="progress slider-progress" id="progress"></div>
+                </div>
+                <span class="progress-time" id="duration">0:00</span>
+            </div>
+        </div>
+
+        <div class="volume-controls">
+            <i class="fas fa-volume-up volume-icon" id="volume-icon" title="Mute"></i>
+            <div class="volume-bar slider-bar" id="volume-bar">
+                <div class="volume-progress slider-progress" id="volume-progress"></div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="chatbot-container">
+        <button class="chatbot-button" onclick="toggleChatbot()">
+            <i class="fas fa-headphones"></i>
+        </button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                Spotify Assistant
+                <button class="close-chatbot" onclick="toggleChatbot()">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    Hey there! Welcome to Spotify! How can I help you discover some great music today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to static JS file -->
+   
+    <script src="{% static 'player/js/main.js' %}"></script>
+    <script>
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            chatbotWindow.style.display = chatbotWindow.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessage(message, isUser = false) {
+            const messagesDiv = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function setLoading(isLoading) {
+            const sendButton = document.querySelector('.chatbot-input button');
+            const input = document.getElementById('chatbotInput');
+            
+            if (isLoading) {
+                sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                sendButton.disabled = true;
+                input.disabled = true;
+            } else {
+                sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                sendButton.disabled = false;
+                input.disabled = false;
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, true);
+                input.value = '';
+                setLoading(true);
+
+                try {
+                    const response = await fetch('http://localhost:5000/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    const data = await response.json();
+                    addMessage(data.response);
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage('Sorry, I\'m having trouble connecting right now. Please make sure the chatbot server is running on port 5000.');
+                } finally {
+                    setLoading(false);
+                }
+            }
+        }
+
+        // Check if server is running when chatbot is opened
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('http://localhost:5000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: 'test' })
+                });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Add server status check to toggle function
+        const originalToggleChatbot = toggleChatbot;
+        toggleChatbot = async function() {
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            if (chatbotWindow.style.display === 'none') {
+                const isServerRunning = await checkServerStatus();
+                if (!isServerRunning) {
+                    alert('Chatbot server is not running. Please start the server first.');
+                    return;
+                }
+            }
+            originalToggleChatbot();
+        };
+    </script>
+</body>
+</html>
