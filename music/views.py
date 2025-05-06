@@ -110,7 +110,7 @@ def login(request):
             return redirect('main')
         else:
             messages.info(request, 'Credentials Invalid')
-            return redirect('/')
+            return redirect('login')
         
     return render(request, 'login.html')
 
@@ -135,7 +135,7 @@ def signup(request):
                 # log user in 
                 user_login = auth.authenticate(username=username, password=password)
                 auth.login(request, user_login)
-                return redirect('/')
+                return redirect('login')
         else:
             messages.info(request, 'Password Not Matching')
             return redirect('signup')
